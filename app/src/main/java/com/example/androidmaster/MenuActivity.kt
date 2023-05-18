@@ -11,13 +11,18 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
         val btnSaludApp = findViewById<Button>(R.id.btnSaludApp)
-        btnSaludApp.setOnClickListener {
-            navigateToSaludApp()
-        }
+        val btnImcApp = findViewById<Button>(R.id.btnIMCApp)
+        btnSaludApp.setOnClickListener { navigateToSaludApp() }
+        btnImcApp.setOnClickListener { navigateToImcApp() }
+
     }
 
-     fun navigateToSaludApp() {
-      val intent = Intent(this, FirstAppActivity::class.java)
-      startActivity(intent)
+    private fun navigateToImcApp() {
+        TODO("Not yet implemented")
+    }
+
+    fun navigateToSaludApp() {
+        val intent = Intent(this, FirstAppActivity::class.java)
+        startActivity(intent)
     }
 }
