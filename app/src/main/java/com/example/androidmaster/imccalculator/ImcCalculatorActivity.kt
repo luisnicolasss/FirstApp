@@ -1,7 +1,9 @@
 package com.example.androidmaster.imccalculator
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -16,6 +18,7 @@ class ImcCalculatorActivity : AppCompatActivity() {
     private var isFemaleSelected: Boolean = false
     private var currentWeight: Int = 60
     private var currentAge: Int = 20
+    private var currentHeight: Int = 120
 
     private lateinit var viewMale: CardView
     private lateinit var viewFemale: CardView
@@ -27,6 +30,11 @@ class ImcCalculatorActivity : AppCompatActivity() {
     private lateinit var btnSubtractAge: FloatingActionButton
     private lateinit var btnPlusAge: FloatingActionButton
     private lateinit var tvAge: TextView
+    private lateinit var btnCalculate: Button
+
+    companion object {
+        const val IMC_KEY = "IMC_RESULT"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +56,7 @@ class ImcCalculatorActivity : AppCompatActivity() {
         btnSubtractAge = findViewById(R.id.btnSubtractAge)
         btnPlusAge = findViewById(R.id.btnPlusAge)
         tvAge = findViewById(R.id.tvAge)
+        btnCalculate = findViewById(R.id.btnCalculate)
     }
 
     private fun initListeners() {
@@ -60,9 +69,10 @@ class ImcCalculatorActivity : AppCompatActivity() {
             setGenderColor()
         }
         rsHeght.addOnChangeListener { _, value, _ ->
+
             val df = DecimalFormat("#.##")
-            val result = df.format(value)
-            tvHeight.text = "$result cm"
+            currentHeight = df.format(value).toInt()
+            tvHeight.text = "$currentHeight cm"
         }
         btnPlusWeight.setOnClickListener {
             currentWeight += 1
@@ -80,6 +90,22 @@ class ImcCalculatorActivity : AppCompatActivity() {
             currentAge -= 1
             setAge()
         }
+        btnCalculate.setOnClickListener {
+            val result = calculateIMC()
+            navigateToResult(result)
+        }
+    }
+
+    private fun navigateToResult(result: Double) {
+        val intent = Intent(this, ResultIMCActivity::class.java)
+        intent.putExtra(IMC_KEY, result)
+        startActivity(intent)
+    }
+
+    private fun calculateIMC(): Double {
+       val df = DecimalFormat("#.##")
+       val imc = currentWeight / (currentHeight.toDouble()/100 * currentHeight.toDouble()/100)
+       return df.format(imc).toDouble()
     }
 
     private fun setAge() {
