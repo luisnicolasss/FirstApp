@@ -12,6 +12,9 @@
         android:theme="@style/Theme.AndroidMaster"
         tools:targetApi="31">
         <activity
+            android:name=".todoapp.TodoActivity"
+            android:exported="false" />
+        <activity
             android:name=".imccalculator.ResultIMCActivity"
             android:exported="false" />
         <activity
