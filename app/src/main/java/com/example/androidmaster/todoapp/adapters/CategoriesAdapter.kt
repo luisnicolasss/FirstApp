@@ -1,9 +1,11 @@
-package com.example.androidmaster.todoapp
+package com.example.androidmaster.todoapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidmaster.R
+import com.example.androidmaster.todoapp.viewholder.CategoriesViewHolder
+import com.example.androidmaster.todoapp.TaskCategory
 
 class CategoriesAdapter(private val categories: List<TaskCategory>) :
     RecyclerView.Adapter<CategoriesViewHolder>() {

@@ -1,10 +1,11 @@
-package com.example.androidmaster.todoapp
+package com.example.androidmaster.todoapp.viewholder
 
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidmaster.R
+import com.example.androidmaster.todoapp.TaskCategory
 
 class CategoriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

@@ -30,5 +30,6 @@
     //TODOApp
     <string name="todo_title">TODO App</string>
     <string name="todo_categories">Categorias</string>
+    <string name="todo_tasks">Tareas</string>
 
 </resources>
