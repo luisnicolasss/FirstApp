@@ -8,7 +8,7 @@ import com.example.androidmaster.todoapp.Task
 import com.example.androidmaster.todoapp.viewholder.CategoriesViewHolder
 import com.example.androidmaster.todoapp.viewholder.TasksViewHolder
 
-class TasksAdapter(private val tasks:List<Task>): RecyclerView.Adapter<TasksViewHolder>() {
+class TasksAdapter(private val tasks:List<Task>, private val onTaskSelected: (Int) -> Unit): RecyclerView.Adapter<TasksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_todo_task, parent, false)
@@ -19,6 +19,7 @@ class TasksAdapter(private val tasks:List<Task>): RecyclerView.Adapter<TasksView
 
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
         holder.render(tasks[position])
+        holder.itemView.setOnClickListener { onTaskSelected(position) }
     }
 
 
