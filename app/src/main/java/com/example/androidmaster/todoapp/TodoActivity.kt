@@ -85,7 +85,7 @@ class TodoActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-        categoriesAdapter = CategoriesAdapter(categories)
+        categoriesAdapter = CategoriesAdapter(categories) {position -> updateCategories(position)}
         rvCategories.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvCategories.adapter = categoriesAdapter
@@ -99,6 +99,11 @@ class TodoActivity : AppCompatActivity() {
     private fun onItemSelected(position: Int){
         tasks[position].isSelected = !tasks[position].isSelected
         updateTask()
+    }
+
+    private fun updateCategories(position: Int){
+      categories[position].isSelected = !categories[position].isSelected
+      categoriesAdapter.notifyItemChanged(position)
     }
 
     private fun updateTask() {

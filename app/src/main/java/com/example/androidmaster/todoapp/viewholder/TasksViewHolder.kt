@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidmaster.R
@@ -17,6 +18,7 @@ class TasksViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val cbTask: CheckBox = view.findViewById(R.id.cbTask)
 
 
+
     fun render(task: Task) {
 
         if (task.isSelected) {
@@ -24,6 +26,8 @@ class TasksViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         } else {
             tvTask.paintFlags = tvTask.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
+
+
 
         tvTask.text = task.name
         cbTask.isChecked = task.isSelected
