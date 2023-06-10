@@ -104,9 +104,13 @@ class TodoActivity : AppCompatActivity() {
     private fun updateCategories(position: Int){
       categories[position].isSelected = !categories[position].isSelected
       categoriesAdapter.notifyItemChanged(position)
+      updateTask()
     }
 
     private fun updateTask() {
+        val selectedCategories: List<TaskCategory> = categories.filter { it.isSelected }
+        val newTasks = tasks.filter { selectedCategories.contains(it.category) }
+        tasksAdapter.tasks = newTasks
         tasksAdapter.notifyDataSetChanged()
     }
 }
