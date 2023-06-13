@@ -19,11 +19,16 @@ class SuperHeroListActivity : AppCompatActivity() {
     private fun initUI() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                TODO("Not yet implemented")
+                searchByName(query.orEmpty())
+                return false
             }
 
             override fun onQueryTextChange(newText: String?) = false
 
         })
+    }
+
+    private fun searchByName(query: String) {
+
     }
 }
