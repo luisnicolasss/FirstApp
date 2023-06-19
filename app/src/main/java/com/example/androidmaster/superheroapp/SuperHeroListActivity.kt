@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.androidmaster.R
 import com.example.androidmaster.databinding.ActivitySuperHeroListBinding
 import kotlinx.coroutines.CoroutineScope
@@ -17,6 +20,7 @@ class SuperHeroListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySuperHeroListBinding
     private lateinit var retrofit: Retrofit
+    private lateinit var adapter: SuperheroAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySuperHeroListBinding.inflate(layoutInflater)
@@ -35,17 +39,33 @@ class SuperHeroListActivity : AppCompatActivity() {
             override fun onQueryTextChange(newText: String?) = false
 
         })
+
+        adapter = SuperheroAdapter()
+        binding.rvSuperhero.setHasFixedSize(true)
+        binding.rvSuperhero.layoutManager = LinearLayoutManager(this)
+        binding.rvSuperhero.adapter = adapter
     }
 
     private fun searchByName(query: String) {
-       CoroutineScope(Dispatchers.IO).launch {
-           val myResponse: Response<SuperHeroDataResponse> = retrofit.create(ApiService::class.java).getSuperheroes(query)
-           if(myResponse.isSuccessful){
-               Log.i("Luis", "Funciona")
-           } else {
-               Log.i("Luis", "No funciona")
-           }
-       }
+        binding.progressBar.isVisible = true
+        CoroutineScope(Dispatchers.IO).launch {
+            val myResponse: Response<SuperHeroDataResponse> =
+                retrofit.create(ApiService::class.java).getSuperheroes(query)
+            if (myResponse.isSuccessful) {
+                Log.i("Luis", "Funciona")
+                val response: SuperHeroDataResponse? = myResponse.body()
+                if (response != null) {
+                    Log.i("Luis", response.toString())
+                    runOnUiThread {
+                        adapter.updateList(response.superheroes)
+                        binding.progressBar.isVisible = false
+                    }
+
+                }
+            } else {
+                Log.i("Luis", "No funciona")
+            }
+        }
     }
 
     private fun getRetrofit(): Retrofit {
