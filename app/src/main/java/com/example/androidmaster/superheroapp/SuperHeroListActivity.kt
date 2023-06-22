@@ -77,8 +77,6 @@ class SuperHeroListActivity : AppCompatActivity() {
             .baseUrl("https://superheroapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
-
     }
 
     private fun navigateToDetail(id: String) {
