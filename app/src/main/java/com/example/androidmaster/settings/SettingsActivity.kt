@@ -13,6 +13,10 @@ import com.example.androidmaster.R
 import com.example.androidmaster.databinding.ActivitySettingsBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -28,11 +32,29 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivitySettingsBinding
+    private var firstTime = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            getSettings().filter { firstTime }.collect { settingsModel ->
+                if (settingsModel != null) {
+                    runOnUiThread {
+                        binding.switchVibration.isChecked = settingsModel.vibration
+                        binding.switchBluetooth.isChecked = settingsModel.bluetooth
+                        binding.switchDarkMode.isChecked = settingsModel.darkMode
+                        binding.rsVolume.setValues(settingsModel.volume.toFloat())
+                        firstTime = !firstTime
+                    }
+
+                }
+
+            }
+        }
+
         initUI()
     }
 
@@ -62,15 +84,26 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun saveVolume(value:Int){
-        dataStore.edit {
-            preferences -> preferences[intPreferencesKey(VOLUME_LVL)] = value
+    private suspend fun saveVolume(value: Int) {
+        dataStore.edit { preferences ->
+            preferences[intPreferencesKey(VOLUME_LVL)] = value
         }
     }
 
-    private suspend fun saveOptions(value:Boolean, key:String){
-        dataStore.edit {
-                preferences -> preferences[booleanPreferencesKey(key)] = value
+    private suspend fun saveOptions(value: Boolean, key: String) {
+        dataStore.edit { preferences ->
+            preferences[booleanPreferencesKey(key)] = value
+        }
+    }
+
+    private fun getSettings(): Flow<SettingsModel> {
+        return dataStore.data.map { preferences ->
+            SettingsModel(
+                volume = preferences[intPreferencesKey(VOLUME_LVL)] ?: 50,
+                bluetooth = preferences[booleanPreferencesKey(KEY_BLUETOOTH)] ?: true,
+                darkMode = preferences[booleanPreferencesKey(KEY_DAR_MODE)] ?: false,
+                vibration = preferences[booleanPreferencesKey(KEY_VIBRATION)] ?: true
+            )
         }
     }
 }
